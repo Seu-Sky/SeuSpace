@@ -13,7 +13,7 @@ class Post(models.Model):
 # 2. Bảng Trang Chủ
 class HomeContent(models.Model):
     # Lời chào trên cùng
-    greeting_title = models.CharField(max_length=200, default='Chào mừng bạn đến với "Góc Nhỏ Của Sêu"', verbose_name="Tiêu đề chào mừng")
+    greeting_title = models.CharField(max_length=200, default='Chào mừng bạn đến với "Góc Nhỏ Của Mình"', verbose_name="Tiêu đề chào mừng")
     greeting_text_1 = models.TextField(default='Nơi mình lưu giữ những điều giản dị nhưng ý nghĩa...', verbose_name="Đoạn giới thiệu 1")
     greeting_text_2 = models.TextField(default='Mình là Sêu - một người đang cố gắng mỗi ngày...', verbose_name="Đoạn giới thiệu 2")
     

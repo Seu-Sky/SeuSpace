@@ -4,7 +4,7 @@
 
 {% block content %}
 <style>
-    /* ÉP MODAL PHẢI TRƯỢT ĐƯỢC KHI QUÁ NHIỀU TRƯỜNG */
+
     #editInfoModal .modal-body {
         max-height: 70vh;
         overflow-y: auto;
@@ -23,7 +23,7 @@
 
 <div class="container py-3 animate-fade-in">
     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-id-card-pulse text-primary me-2"></i>Hồ Sơ Của Sêu</h2>
+        <h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-id-card-pulse text-primary me-2"></i>Hồ Sơ Của Mình</h2>
         {% if request.user.is_authenticated %}
         <div class="d-flex gap-2">
             <button class="btn btn-outline-primary rounded-pill btn-sm fw-bold px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#editInfoModal">

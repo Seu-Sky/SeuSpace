@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <style>
+        /* --- 1. Cấu hình nền và Khóa cuộn trang chính --- */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb; 
+            overflow: hidden; /* Chỉ cuộn bên trong khối nội dung */
+        }
+
+        /* --- 2. Sidebar Menu --- */
+        .sidebar-menu {
+            background-color: #ffffff;
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            height: calc(100vh - 160px); /* Sidebar cao vừa đủ */
+            padding: 10px;
+        }
+
+        .sidebar-menu a {
+            color: #495057;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out; 
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #f1f5f9; 
+            color: #0d6efd;
+           
+        }
+
+        .sidebar-menu a.active {
+            background-color: #0d6efd; 
+            color: #ffffff; 
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+        }
+
+        .sidebar-menu a i { width: 25px; }
+
+        /* --- 3. KHỐI NỘI DUNG CHÍNH (CHẠM FOOTER) --- */
+        .scrollable-content {
+            /* Con số -142px giúp mép dưới khít khịt với Footer */
+            height: calc(100vh - 142px); 
+            overflow-y: auto; 
+            padding: 25px;
+            scroll-behavior: smooth;
+            background-color: #ffffff;
+            
+            /* Bỏ bo góc dưới để chạm Footer không bị hở */
+            border-radius: 20px 20px 0 0 !important; 
+            margin-bottom: 0 !important;
+            border-bottom: none !important;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02);
+        }
+
+        /* Tùy chỉnh thanh cuộn siêu mảnh */
+        .scrollable-content::-webkit-scrollbar { width: 5px; }
+        .scrollable-content::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb:hover { background: #0d6efd; }
+
+        /* --- 4. Footer cố định --- */
+        footer {
+            background-color: #ffffff; 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 1000;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #edf2f7;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* --- 5. Avatar & Search UI --- */
+        .avatar-wrapper { cursor: pointer; transition: transform 0.2s; position: relative; }
+        .avatar-wrapper:hover { transform: scale(1.05); }
+        .avatar-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white; opacity: 0; transition: opacity 0.3s;
+        }
+        .avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+
+            /* Hiệu ứng khi Sêu bấm vào ô tìm kiếm */
+        .search-box-custom:focus-within {
+            max-width: 500px !important; /* Khi bấm vào, nó sẽ tự động dài ra thêm một chút cực ngầu */
+            border-color: #3b82f6 !important;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.15) !important;
+        }
+
+        /* Nút bấm Gradient đồng bộ màu xanh Sky của Sêu */
+        .btn-search-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-search-gradient:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .footer-icon { transition: transform 0.2s; opacity: 0.8; }
+        .footer-icon:hover { transform: scale(1.2); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-4 mt-2">  
+        <div class="row mb-3 border-bottom pb-2 align-items-center">
+             <div class="col-md-6 d-flex align-items-center">
+                <div class="d-inline-block avatar-wrapper">
+                    {% if request.user.userprofile.avatar %}
+                        <img src="{{ request.user.userprofile.avatar.url }}" class="img-fluid rounded-circle shadow-sm" style="width: 65px; height: 65px; object-fit: cover;" alt="Avatar" />
+                    {% else %}
+                        <img src="{% static 'seeu.jpg' %}" class="img-fluid rounded-circle shadow-sm" style="width: 65px; height: 65px; object-fit: cover;" alt="Default Avatar" />
+                    {% endif %}
+
+                    {% if request.user.is_authenticated %}
+                    <a href="/update-avatar/" class="avatar-overlay d-flex align-items-center justify-content-center rounded-circle text-decoration-none">
+                        <i class="fa-solid fa-camera text-white"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                <h3 class="text-primary mb-0 fw-bold ms-3" style="letter-spacing: 1px; text-transform: uppercase; font-size: 20px;">
+                    Góc Nhỏ Của {% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Bạn{% endif %}
+                </h3>
+            </div>
+            
+           <div class="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
+                <form action="/blog/" method="GET" class="search-box-custom d-flex shadow-sm rounded-pill overflow-hidden p-1 bg-white border animate-fade-in" 
+                    style="width: 100%; max-width: 450px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);">
+                    
+                    <input type="text" name="q" value="{{ request.GET.q }}" 
+                        class="form-control border-0 px-4 py-1 bg-transparent shadow-none" 
+                        placeholder="Khám phá bài viết" 
+                        style="font-size: 13.5px; color: #475569; min-height: 35px;">
+                    
+                    <button type="submit" class="btn btn-search-gradient rounded-pill px-4 border-0 d-flex align-items-center" 
+                            style="font-size: 13px; height: 32px; align-self: center; white-space: nowrap;">
+                        <i class="fa-solid fa-magnifying-glass me-2" style="font-size: 11px;"></i>
+                        <span class="fw-bold d-none d-sm-inline">Tìm kiếm</span>
+                    </button>
+                </form>
+            </div>
+
+        <div class="row g-3">
+            <div class="col-md-3 col-lg-2">
+                <div class="sidebar-menu shadow-sm">
+                    <ul class="nav flex-column">
+                        <li class="mb-3">
+                            <div class="px-3 py-2 text-primary fw-bold d-flex align-items-center shadow-sm" style="background-color: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 14px;">
+                                <i class="fa-solid fa-sparkles me-2"></i>
+                                <span>
+                                    {% now "H" as hour_str %}
+                                    
+                                    {% with hour=hour_str|add:"0" %}
+                                        {% if hour >= 5 and hour < 12 %} 
+                                            <i class="fa-solid fa-sun text-warning me-1"></i> Chào buổi sáng,
+                                        {% elif hour >= 12 and hour < 18 %} 
+                                            <i class="fa-solid fa-cloud-sun text-info me-1"></i> Chào buổi chiều,
+                                        {% else %} 
+                                            <i class="fa-solid fa-moon text-primary me-1"></i> Chào buổi tối,
+                                        {% endif %}
+                                    {% endwith %}
+                                    
+                                    {{ request.user.username|default:"Sêu" }}
+                                </span>
+                            </div>
+                        </li>
+                        <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                        <li><a href="/blog" class="{% if '/blog' in request.path %}active{% endif %}"><i class="fa-solid fa-pen-nib"></i> Bài viết</a></li>
+                        <li><a href="/info" class="{% if '/info' in request.path %}active{% endif %}"><i class="fa-solid fa-user"></i> Thông tin</a></li>
+                        <li><a href="/contact" class="{% if '/contact' in request.path %}active{% endif %}"><i class="fa-solid fa-envelope"></i> Liên hệ</a></li>
+
+                        <hr class="text-muted my-2">
+
+                        {% if request.user.is_authenticated %}
+                            <li><a href="/blog/add_blog/" class="{% if '/blog/add_blog' in request.path %}active{% endif %}"><i class="fa-solid fa-plus-circle"></i> Viết bài mới</a></li>
+                            <li class="mt-2"><a href="/logout/" class="fw-medium text-danger" style="background-color: #fff5f5;"><i class="fa-solid fa-power-off"></i> Đăng xuất</a></li>
+                        {% else %}
+                            <li><a href="/login/" class="active fw-bold"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10 ps-md-2"> <div class="scrollable-content shadow-sm">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 shadow-sm border-0 d-flex align-items-center" role="alert">
+                                <i class="fa-solid fa-circle-check me-2"></i>
+                                <div>{{ message }}</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-3 border-top">
+        <div class="container d-flex justify-content-center align-items-center">
+            <span class="text-muted small fw-medium me-3">Kết Nối Với Mình Qua:</span>
+            <a href="https://www.facebook.com/SeuCarrot" target="_blank" class="text-primary mx-2 footer-icon"><i class="fa-brands fa-facebook fa-xl"></i></a> 
+            <a href="https://github.com/Seu-Sky" target="_blank" class="text-dark mx-2 footer-icon"><i class="fa-brands fa-github fa-xl"></i></a> 
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 3000);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(url, title = "Bạn chắc chắn chứ?") {
+            Swal.fire({
+                title: title,
+                text: "Xóa là mất luôn, không lấy lại được đâu nhé!",
+                icon: 'warning',
+                showCancelButton: true,              
+                confirmButtonColor: '#dc3545', 
+                cancelButtonColor: '#0d6efd',  
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy bỏ',
+                borderRadius: '15px'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url; 
+                }
+            })
+        }
+    </script>
+        
+</body>
+</html>

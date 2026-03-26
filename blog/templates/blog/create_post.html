@@ -1,0 +1,86 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Viết bài mới {% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+
+            <div class="text-center mb-5 border-bottom pb-4">
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 mb-3 fw-bold">
+                    Trạm sáng tạo
+                </span>
+                <h2 class="fw-bold text-dark mb-2">Tạo Bài Viết Mới</h2>
+                <p class="text-muted">Chia sẻ những điều thú vị của bạn hôm nay!</p>
+            </div>
+
+            <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="django-form-custom mb-4">
+                    {{ form.as_p }}
+                </div>
+
+                <div class="mt-5 pt-4 border-top d-flex justify-content-between align-items-center">
+
+                    <a href="/blog/" class="btn btn-outline-primary rounded-pill px-4 fw-medium shadow-sm">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Huỷ bỏ
+                    </a>
+
+                    <button type="submit" class="btn btn-outline-primary rounded-pill px-5 fw-bold shadow-sm"
+                        style="font-size: 16px;">
+                        <i class="fa-solid fa-paper-plane me-2"></i> Đăng bài ngay
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Làm đẹp cho form đăng bài */
+    .django-form-custom label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        margin-top: 15px;
+        display: block;
+        font-size: 15px;
+    }
+
+    /* Chỉnh ô nhập chữ và chọn file */
+    .django-form-custom input[type="text"],
+    .django-form-custom input[type="file"],
+    .django-form-custom textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        color: #212529;
+        transition: all 0.3s ease;
+    }
+
+    .django-form-custom textarea {
+        min-height: 200px;
+        resize: vertical;
+    }
+
+    .django-form-custom input:focus,
+    .django-form-custom textarea:focus {
+        border-color: #0d6efd;
+        background-color: #ffffff;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+    }
+
+    .django-form-custom span.helptext {
+        font-size: 13px;
+        color: #6c757d;
+        display: block;
+        margin-top: 6px;
+    }
+</style>
+{% endblock %}

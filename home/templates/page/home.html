@@ -1,0 +1,93 @@
+{% extends "page/base.html" %}
+
+{% block title %}Trang chủ {% endblock %}
+
+{% block content %}
+<div class="container py-2 position-relative animate-fade-in">
+    
+    {% if request.user.is_authenticated %}
+    <div class="text-end mb-3 position-absolute top-0 end-0 mt-2 me-3" style="z-index: 10;">
+        <a href="{% url 'edit_home' %}" class="btn btn-primary rounded-pill btn-sm px-3 shadow-sm fw-bold transition-hover">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Sửa trang chủ
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="mb-5 p-4 bg-white rounded-4 shadow-sm border-start border-5 border-primary transition-hover pt-5 pt-md-4">
+        <h2 class="fw-bold text-danger mb-3">{{ content.greeting_title }}</h2>
+        <p class="text-secondary mb-3" style="line-height: 1.8; font-size: 17px; text-align: justify;">
+            {{ content.greeting_text_1|linebreaksbr }}
+        </p>
+        <p class="text-secondary mb-0" style="line-height: 1.8; font-size: 17px; text-align: justify;">
+            {{ content.greeting_text_2|linebreaksbr }}
+        </p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 transition-hover">
+                <div class="card-body p-0">
+                    <i class="fa-solid fa-book-open fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold text-primary">{{ content.col1_title }}</h5>
+                    <p class="card-text text-muted mt-3" style="font-size: 15px; line-height: 1.6; text-align: justify;">
+                        {{ content.col1_text|linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 transition-hover">
+                <div class="card-body p-0">
+                    <i class="fa-solid fa-music fa-3x text-success mb-3"></i>
+                    <h5 class="card-title fw-bold text-success">{{ content.col2_title }}</h5>
+                    <p class="card-text text-muted mt-3" style="font-size: 15px; line-height: 1.6; text-align: justify;">
+                        {{ content.col2_text|linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 transition-hover">
+                <div class="card-body p-0">
+                    <i class="fa-solid fa-futbol fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title fw-bold text-danger">{{ content.col3_title }}</h5>
+                    <p class="card-text text-muted mt-3" style="font-size: 15px; line-height: 1.6; text-align: justify;">
+                        {{ content.col3_text|linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="text-center p-4 bg-light rounded-4 shadow-sm border-top border-4 border-info transition-hover">
+        <p class="mb-2 text-dark" style="font-size: 16px; line-height: 1.8; font-style: italic;">
+            {{ content.footer_text|linebreaksbr }}
+        </p>
+        <h5 class="fw-bold text-danger mt-3">{{ content.footer_thanks }}</h5>
+    </div>
+</div>
+
+<style>
+    /* Hiệu ứng chuyển động mượt mà khi di chuột qua các khối */
+    .transition-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Hiệu ứng hiện dần khi load trang */
+    .animate-fade-in { 
+        animation: fadeIn 0.8s ease-in-out; 
+    }
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: translateY(15px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+</style>
+{% endblock %}

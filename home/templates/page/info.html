@@ -1,0 +1,264 @@
+{% extends "page/base.html" %}
+
+{% block title %}Thông tin cá nhân{% endblock %}
+
+{% block content %}
+<style>
+    /* ÉP MODAL PHẢI TRƯỢT ĐƯỢC KHI QUÁ NHIỀU TRƯỜNG */
+    #editInfoModal .modal-body {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+    
+    /* Làm đẹp thanh cuộn */
+    #editInfoModal .modal-body::-webkit-scrollbar { width: 6px; }
+    #editInfoModal .modal-body::-webkit-scrollbar-thumb { background: #0d6efd; border-radius: 10px; }
+
+    .transition-hover { transition: all 0.3s ease; }
+    .transition-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+    .animate-fade-in { animation: fadeIn 0.8s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="container py-3 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-id-card-pulse text-primary me-2"></i>Hồ Sơ Của Sêu</h2>
+        {% if request.user.is_authenticated %}
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary rounded-pill btn-sm fw-bold px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#editInfoModal">
+                <i class="fa-solid fa-user-gear me-1"></i> Sửa hồ sơ
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-primary text-white rounded-top-4 py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-user me-2"></i> Cá nhân</h5>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="list-group list-group-flush" style="font-size: 15px;">
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Họ tên:</strong> {{ profile.full_name }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Ngày sinh:</strong> {{ profile.birth_date }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Giới tính:</strong> {{ profile.gender }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Quê quán:</strong> {{ profile.hometown }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Số ĐT:</strong> {{ profile.phone }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Email:</strong> {{ profile.email_contact }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Địa chỉ:</strong> {{ profile.address }}</li>
+                        <li class="list-group-item px-0 py-2 border-bottom-0"><strong class="text-dark d-block mb-1">Sở thích:</strong> <span class="text-muted">{{ profile.hobbies }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-success text-white rounded-top-4 py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-graduation-cap me-2"></i> Học vấn </h5>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="list-group list-group-flush" style="font-size: 15px;">
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Mã SV:</strong> {{ profile.student_id }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Trường:</strong> {{ profile.university }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Ngành:</strong> {{ profile.major }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Lớp:</strong> {{ profile.class_name }}</li>
+                        <li class="list-group-item px-0 py-2 d-flex"><strong class="text-dark" style="min-width: 130px;">Khóa học:</strong> {{ profile.academic_year }}</li>
+                        <li class="list-group-item px-0 py-3 border-bottom-0">
+                            <div class="d-flex gap-2">
+                                <a href="{{ profile.facebook_url }}" target="_blank" class="btn btn-sm btn-primary rounded-pill px-3">
+                                    <i class="fa-brands fa-facebook-f me-1"></i> Facebook
+                                </a>
+                                <a href="{{ profile.github_url }}" target="_blank" class="btn btn-sm btn-dark rounded-pill px-3">
+                                    <i class="fa-brands fa-github me-1"></i> GitHub
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-2">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-code me-2"></i> Dự án & Kinh nghiệm</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-secondary rounded-pill">{{ projects.count }} dự án</span>
+                        {% if request.user.is_authenticated %}
+                        <button class="btn btn-outline-success btn-sm rounded-pill px-3 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                            <i class="fa-solid fa-plus me-1"></i> Thêm mới dự án
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 bg-light-subtle">
+                    <div class="row g-4">
+                        {% for project in projects %}
+                        <div class="col-md-6">
+                            <div class="p-4 bg-white rounded-4 border-start border-4 border-{{ project.border_color }} h-100 shadow-sm transition-hover position-relative">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="fw-bold text-dark fs-5">{{ project.title }}</h6>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        {% if request.user.is_authenticated %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                                               <li><a class="dropdown-item small" href="{% url 'edit_project' project.id %}"><i class="fa-solid fa-pen-to-square me-2 text-primary"></i>Sửa</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item small text-danger" href="javascript:void(0);" 
+                                                       onclick="confirmDelete('{% url 'delete_project' project.id %}', 'Xóa dự án này?')">
+                                                       <i class="fa-solid fa-trash me-2"></i>Xóa</a></li>
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                        <i class="fa-solid fa-rocket text-{{ project.border_color }} fs-5"></i>
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-muted small mt-2">{{ project.description }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center py-4">
+                            <p class="text-muted">Chưa có dự án nào. Thêm ngay đi bạn ơi!</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addProjectModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <div class="modal-header border-0 px-4 pt-4">
+                        <h5 class="fw-bold text-success"><i class="fa-solid fa-folder-plus me-2"></i>Thêm dự án mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="{% url 'add_project' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body p-4">
+                            {{ project_form.as_p }}
+                        </div>
+                        <div class="modal-footer border-0 px-4 pb-4">
+                            <button type="button" class="btnbtn-outline-primary rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-outline-primary rounded-pill px-4 fw-bold">Lưu dự án</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 px-4 pt-4 pb-0">
+                <h5 class="fw-bold text-primary"><i class="fa-solid fa-user-pen me-2"></i>Cập nhật thông tin chi tiết</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="profile">
+                <div class="modal-body p-4">
+                    <p class="fw-bold text-dark border-bottom pb-2 mb-3">Thông tin cá nhân</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Họ và tên:</label>
+                        {{ profile_form.full_name }}
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Ngày sinh:</label>
+                            {{ profile_form.birth_date }}
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Giới tính:</label>
+                            {{ profile_form.gender }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Quê quán:</label>
+                        {{ profile_form.hometown }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Sở thích:</label>
+                        {{ profile_form.hobbies }}
+                    </div>
+
+                    <p class="fw-bold text-dark border-bottom pb-2 mt-4 mb-3">Học vấn tại Đông Á</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Mã sinh viên:</label>
+                        {{ profile_form.student_id }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Chuyên ngành:</label>
+                        {{ profile_form.major }}
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Lớp:</label>
+                            {{ profile_form.class_name }}
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Khóa học:</label>
+                            {{ profile_form.academic_year }}
+                        </div>
+                    </div>
+
+                    <p class="fw-bold text-dark border-bottom pb-2 mt-4 mb-3">Liên hệ & Mạng xã hội</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Số điện thoại:</label>
+                        {{ profile_form.phone }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Email liên hệ:</label>
+                        {{ profile_form.email_contact }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Địa chỉ hiện tại:</label>
+                        {{ profile_form.address }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Link Facebook:</label>
+                        {{ profile_form.facebook_url }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Link GitHub:</label>
+                        {{ profile_form.github_url }}
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4 gap-2">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary rounded-pill flex-grow-1 fw-bold py-2 shadow-sm">Lưu toàn bộ thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-bottom-0 px-4 pt-4 pb-0">
+                <h5 class="fw-bold text-success"><i class="fa-solid fa-folder-plus me-2"></i>Thêm dự án mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="project">
+                <div class="modal-body p-4">
+                    {{ project_form.as_p }}
+                </div>
+                <div class="modal-footer border-top-0 px-4 pb-4 gap-2">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-success rounded-pill flex-grow-1 fw-bold py-2 shadow-sm">Thêm ngay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

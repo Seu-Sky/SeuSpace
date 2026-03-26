@@ -1,0 +1,211 @@
+{% extends "page/base.html" %}
+
+{% block title %}Liên hệ{% endblock %}
+
+{% block content %}
+<style>
+    /* 1. HIỆU ỨNG VÀ FIX LỖI TRƯỢT MODAL */
+    .animate-fade-in { animation: fadeInContact 0.6s ease-out; }
+    @keyframes fadeInContact { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ÉP MODAL PHẢI TRƯỢT ĐƯỢC VÀ ĐẸP */
+    #editProfileModal .modal-body {
+        max-height: 70vh; /* Giới hạn chiều cao */
+        overflow-y: auto; /* Hiện thanh cuộn */
+        padding-right: 15px;
+    }
+
+    /* Custom thanh cuộn màu xanh cho đồng bộ */
+    #editProfileModal .modal-body::-webkit-scrollbar { width: 6px; }
+    #editProfileModal .modal-body::-webkit-scrollbar-thumb { background: #0d6efd; border-radius: 10px; }
+    #editProfileModal .modal-body::-webkit-scrollbar-track { background: #f8f9fa; }
+
+    .transition-hover { transition: all 0.3s ease; }
+    .transition-hover:hover { transform: scale(1.02); box-shadow: 0 8px 15px rgba(13, 110, 253, 0.1) !important; }
+</style>
+
+<div class="container py-3 animate-fade-in">
+    <h2 class="fw-bold text-primary mb-4 border-bottom pb-3">
+        <i class="fa-solid fa-paper-plane text-primary me-2"></i>Liên Hệ Với Mình
+    </h2>
+
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-0 px-4 pt-4 pb-0">
+                    <h5 class="modal-title fw-bold text-primary d-flex align-items-center">
+                        <i class="fa-solid fa-user-pen me-2 fs-4"></i> Cập nhật hồ sơ đầy đủ
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="profile"> 
+
+                    <div class="modal-body p-4">
+                        <p class="fw-bold text-dark border-bottom pb-2 mb-3">1. Thông tin cá nhân</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Họ và tên:</label>
+                            {{ profile_form.full_name }}
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Ngày sinh:</label>
+                                {{ profile_form.birth_date }}
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Giới tính:</label>
+                                {{ profile_form.gender }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Quê quán:</label>
+                            {{ profile_form.hometown }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Sở thích:</label>
+                            {{ profile_form.hobbies }}
+                        </div>
+
+                        <p class="fw-bold text-dark border-bottom pb-2 mt-4 mb-3">2. Học vấn (Đông Á)</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Mã sinh viên:</label>
+                            {{ profile_form.student_id }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Trường:</label>
+                            {{ profile_form.university }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Chuyên ngành:</label>
+                            {{ profile_form.major }}
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Lớp:</label>
+                                {{ profile_form.class_name }}
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Khóa học:</label>
+                                {{ profile_form.academic_year }}
+                            </div>
+                        </div>
+
+                        <p class="fw-bold text-dark border-bottom pb-2 mt-4 mb-3">3. Liên hệ & Mạng xã hội</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Số điện thoại:</label>
+                            {{ profile_form.phone }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Email liên hệ:</label>
+                            {{ profile_form.email_contact }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Địa chỉ hiện tại:</label>
+                            {{ profile_form.address }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Link Facebook:</label>
+                            {{ profile_form.facebook_url }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Link GitHub:</label>
+                            {{ profile_form.github_url }}
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-outline-primary  rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">Lưu toàn bộ thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm rounded-4 h-100 bg-primary text-white p-4 position-relative overflow-hidden">
+                <div class="position-absolute top-0 end-0 opacity-10" style="transform: translate(20%, -20%);">
+                    <i class="fa-solid fa-address-book" style="font-size: 150px;"></i>
+                </div>
+
+                <div class="position-relative z-index-1">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold mb-0">Thông tin liên lạc</h4>
+                        {% if request.user.is_authenticated %}
+                        <button type="button" class="btn btn-light btn-sm rounded-pill fw-bold px-3 shadow-sm" 
+                                style="font-size: 11px;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Sửa nhanh
+                        </button>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="mb-4 d-flex align-items-center" style="font-size: 16px;">
+                        <i class="fa-solid fa-phone me-3 fs-5"></i> 
+                        <span>{{ profile.phone|default:"0348337534" }}</span>
+                    </p>
+                    <p class="mb-4 d-flex align-items-center" style="font-size: 16px;">
+                        <i class="fa-solid fa-envelope me-3 fs-5"></i> 
+                        <span class="text-break">{{ profile.email_contact|default:"yseu12006@gmail.com" }}</span>
+                    </p>
+                    <p class="mb-4 d-flex align-items-center" style="font-size: 16px;">
+                        <i class="fa-solid fa-location-dot me-3 fs-5"></i> 
+                        <span>{{ profile.address|default:"Gia Lai, Việt Nam" }}</span>
+                    </p>
+                    
+                    <hr class="border-light opacity-50 my-4">
+                    
+                    <div>
+                        <h6 class="fw-bold mb-3">Kết nối với mình qua:</h6>
+                        <div class="d-flex gap-2">
+                            <a href="{{ profile.facebook_url|default:'#' }}" target="_blank" class="btn btn-light btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                <i class="fa-brands fa-facebook-f text-primary fs-5"></i>
+                            </a>
+                            <a href="{{ profile.github_url|default:'#' }}" target="_blank" class="btn btn-light btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                <i class="fa-brands fa-github text-dark fs-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                <h4 class="fw-bold text-primary mb-4">Gửi tin nhắn cho mình</h4>
+                
+                <form action="" method="POST">
+                    {% csrf_token %} 
+                    <input type="hidden" name="form_type" value="contact">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium text-secondary small">Tên của bạn</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium text-secondary small">Email</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium text-secondary small">Tiêu đề</label>
+                            {{ form.subject }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium text-secondary small">Nội dung tin nhắn</label>
+                            {{ form.message }}
+                        </div>
+                        <div class="col-12 mt-4 text-end">
+                            <button type="submit" class="btn btn-outline-primary px-5 py-2 rounded-pill fw-bold shadow-sm transition-hover">
+                                <i class="fa-solid fa-paper-plane me-2"></i> Gửi Tin Nhắn
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

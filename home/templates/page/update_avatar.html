@@ -1,0 +1,46 @@
+{% extends 'page/base.html' %}
+{% load static %}  {% block title %}Đổi ảnh đại diện{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+            <h4 class="fw-bold mb-4 text-primary ">Thay đổi ảnh đại diện</h4>
+            
+            <div class="mb-4">
+                {% if request.user.userprofile.avatar %}
+                    <img id="preview" src="{{ request.user.userprofile.avatar.url }}" class="rounded-circle shadow-sm border" style="width: 120px; height: 120px; object-fit: cover;" alt="Current Avatar">
+                {% else %}
+                    <img id="preview" src="{% static 'seeu.jpg' %}" class="rounded-circle shadow-sm border" style="width: 120px; height: 120px; object-fit: cover;" alt="Default Avatar">
+                {% endif %}
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-4 text-start">
+                    <label for="id_avatar" class="form-label small fw-bold text-muted">Chọn tệp ảnh từ máy</label>
+                    <input type="file" name="avatar" accept="image/*" class="form-control rounded-pill border-0 bg-light shadow-none" id="id_avatar" onchange="previewImage(event)">
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a href="/" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

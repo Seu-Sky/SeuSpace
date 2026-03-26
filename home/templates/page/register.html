@@ -1,0 +1,102 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Đăng ký tài khoản{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center h-100 py-2">
+    <div class="col-md-10 col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+            
+            <div class="text-center mb-4 border-bottom pb-3">
+                <h3 class="fw-bold text-dark mb-2">
+                    <i class="fa-solid fa-user-plus text-primary me-2"></i>Tạo Tài Khoản Mới
+                </h3>
+                <p class="text-muted mb-0" style="font-size: 15px;">Tham gia Góc Nhỏ Của Sêu ngay hôm nay!</p>
+            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger rounded-3 fw-medium py-2 px-3 mb-3">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="django-form-custom row g-3 mb-4">
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.username.label }}</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="text-danger mt-1 small fw-medium">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger mt-1 small fw-medium">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.password1.label }}</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="text-danger mt-1 small fw-medium">{{ form.password1.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.password2.label }}</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="text-danger mt-1 small fw-medium">{{ form.password2.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+
+                <div class="text-center mt-2">
+                    <button type="submit" class="btn btn-primary px-5 rounded-pill py-2 fw-bold shadow-sm" style="font-size: 16px;">
+                        <i class="fa-solid fa-check me-2"></i> Đăng Ký Ngay
+                    </button>
+                </div>
+                
+                <div class="text-center mt-4 pt-2">
+                    <span class="text-muted">Đã có tài khoản?</span>
+                    <a href="/login/" class="text-primary fw-bold text-decoration-none ms-1">Đăng nhập ngay</a>
+                </div>
+
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<style>
+    /* CSS tuỳ chỉnh cho thẻ input của Django */
+    .django-form-custom label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+    .django-form-custom input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        color: #212529;
+        transition: all 0.3s ease;
+    }
+    .django-form-custom input:focus {
+        border-color: #0d6efd;
+        background-color: #ffffff;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Sửa Trang Chủ - Góc Nhỏ Của Sêu{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0 fw-bold"><i class="fa-solid fa-pen-nib me-2"></i>Chỉnh sửa Trang Chủ</h4>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-light-subtle">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            {% for field in form %}
+                                <div class="col-md-12">
+                                    <label class="fw-bold text-dark mb-2">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mt-5 pt-4 border-top d-flex gap-3 justify-content-end">
+                            <a href="/" class="btn btn-outline-primary rounded-pill px-4 fw-bold">Hủy bỏ</a>
+                            <button type="submit" class="btn btn-outline-primary rounded-pill px-5 fw-bold shadow-sm">
+                                <i class="fa-solid fa-floppy-disk me-2"></i>Lưu thay đổi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

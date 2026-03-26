@@ -1,0 +1,56 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Nâng cấp dự án - {{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-primary bg-opacity-10 border-0 pt-5 pb-4 text-center">
+                    <span class="badge bg-primary text-white rounded-pill px-3 py-2 mb-2 fw-bold shadow-sm">
+                        Trạm nâng cập dự án
+                    </span>
+                    <h2 class="fw-bold text-dark mb-0">Sửa: {{ project.title }}</h2>
+                </div>
+
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="django-form-custom">
+                            {{ form.as_p }}
+                        </div>
+
+                        <div class="mt-5 pt-4 border-top d-flex flex-column flex-md-row gap-3 justify-content-between align-items-center">
+                            <a href="{% url 'info' %}" class="btn btn-outline-primary rounded-pill px-4 fw-bold transition-all w-100 w-md-auto">
+                                <i class="fa-solid fa-arrow-left me-2"></i> Quay lại
+                            </a>
+                            
+                            <button type="submit" class="btn btn-outline-primary rounded-pill px-5 fw-bold shadow-sm transition-hover w-100 w-md-auto">
+                                <i class="fa-solid fa-floppy-disk me-2"></i> Lưu thay đổi ngay
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Style form đồng bộ với trang Blog và Info của Sêu */
+    .django-form-custom p { margin-bottom: 20px; }
+    .django-form-custom label { font-weight: 700; color: #334155; display: block; margin-bottom: 8px; font-size: 14px; text-transform: uppercase; }
+    .django-form-custom input, .django-form-custom textarea, .django-form-custom select {
+        width: 100%; padding: 12px; border: 2px solid #f1f5f9; border-radius: 12px; background: #f8fafc; transition: all 0.3s;
+    }
+    .django-form-custom input:focus, .django-form-custom textarea:focus {
+        border-color: #0d6efd; background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+    }
+    .pulse-icon { animation: pulse-blue 2s infinite; }
+    @keyframes pulse-blue { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+{% endblock %}

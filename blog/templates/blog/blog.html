@@ -1,0 +1,161 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Bài viết - Góc Chia Sẻ{% endblock %}
+
+{% block content %}
+<style>
+    /* Hiệu ứng cho Bài viết */
+    .post-card { transition: all 0.3s ease; }
+    .post-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important; }
+    .post-card:hover .post-thumbnail { transform: scale(1.05); }
+    .thumbnail-container { overflow: hidden; position: relative; border-radius: 1rem 1rem 0 0; }
+    .post-thumbnail { transition: transform 0.5s ease; object-fit: cover; width: 100%; height: 220px; }
+    .post-title-link { transition: color 0.3s ease; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-decoration: none;}
+    .post-title-link:hover { color: #0d6efd !important; }
+
+    /* Thanh cuộn ngang Chủ đề */
+    .category-scroll::-webkit-scrollbar { height: 4px; }
+    .category-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+</style>
+
+<div class="container py-4 animate-fade-in">
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+        <h2 class="text-primary fw-bold mb-0">
+            <i class="fa-solid fa-pen-nib text-primary me-2"></i>Góc Chia Sẻ
+        </h2>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'blog:create_post' %}" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                <i class="fa-solid fa-plus me-2"></i> Viết bài mới
+            </a>
+        {% endif %}
+    </div> 
+        <div class="mb-4 bg-white p-3 rounded-4 shadow-sm border">
+            <div class="d-flex align-items-center mb-2">
+                <i class="fa-solid fa-layer-group text-primary me-2"></i>
+                <span class="text-muted small fw-bold text-uppercase">Lọc theo chủ đề</span>
+            </div>
+     
+        <div class="d-flex overflow-auto gap-3 pb-3 pt-2 category-scroll" style="white-space: nowrap;">
+                
+                <a href="{% url 'blog:post_list' %}" 
+                class="btn btn-sm rounded-pill px-4 transition-all {% if not category %}btn-primary fw-bold shadow-sm {% else %}btn-outline-primary {% endif %}">
+                    <i class="fa-solid fa-border-all me-1"></i> Tất cả
+                </a>
+                
+                {% for cat in categories %}
+                    <div class="position-relative d-inline-block">
+                        
+                        <a href="{% url 'blog:post_list_by_category' cat.slug %}" 
+                        class="btn btn-sm rounded-pill px-4 transition-all {% if category and category.slug == cat.slug %}btn-primary fw-bold shadow-sm {% else %}btn-outline-primary {% endif %}">
+                            {{ cat.name }} 
+                        </a>
+                        
+                        {% if request.user.is_authenticated %}
+                        <a href="javascript:void(0);" 
+                        onclick="confirmDelete('{% url 'blog:delete_category' cat.id %}', 'Bạn có chắc chắn muốn xóa chủ đề này không? Các bài viết bên trong sẽ được chuyển thành Chưa phân loại.')" 
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger text-white shadow-sm"
+                        style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 2px solid white; margin-left: -10px;">
+                            <i class="fa-solid fa-xmark" style="font-size: 10px;"></i>
+                        </a>
+                        {% endif %}
+                        
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if search_query %}
+        <div class="alert alert-white border-0 border-start border-4 border-primary shadow-sm rounded-4 d-flex align-items-center justify-content-between mb-4 py-3" style="background-color: #ffffff;">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="fa-solid fa-magnifying-glass text-primary"></i>
+                </div>
+                <span class="text-muted fw-medium">
+                    Kết quả tìm kiếm cho: <span class="badge rounded-pill bg-primary text-white px-3 ms-1 fs-6">"{{ search_query }}"</span>
+                </span>
+            </div>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold transition-all">
+                <i class="fa-solid fa-circle-xmark me-1"></i> Hủy tìm kiếm
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {% for post in posts %}
+            <div class="col-md-6 col-lg-4"> 
+                <div class="card post-card border-0 shadow-sm rounded-4 h-100 d-flex flex-column">
+                    
+                    <a href="{% url 'blog:post_detail' post.id %}" class="thumbnail-container bg-light d-block">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" class="post-thumbnail" alt="{{ post.title }}">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center post-thumbnail" style="background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);">
+                                <i class="fa-solid fa-feather-pointed fa-3x text-primary opacity-25"></i>
+                            </div>
+                        {% endif %}
+                        
+                        {% if post.category %}
+                            <span class="badge bg-primary shadow-sm rounded-pill px-3 py-2 position-absolute top-0 start-0 m-3" style="z-index: 2;">
+                                {{ post.category.name }}
+                            </span>
+                        {% endif %}
+                    </a>
+
+                    <div class="card-body p-4 d-flex flex-column">
+                        <small class="text-muted mb-2 fw-medium"><i class="fa-regular fa-calendar-days me-2"></i>{{ post.date|date:"d/m/Y" }}</small>
+                        
+                        <h5 class="fw-bold mb-3">
+                            <a href="{% url 'blog:post_detail' post.id %}" class="text-dark post-title-link">
+                                {{ post.title }}
+                            </a>
+                        </h5>
+                        
+                        <p class="text-muted mb-4 flex-grow-1" style="line-height: 1.6; font-size: 15px;">
+                            {{ post.body|truncatewords:20 }}
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                            <a href="{% url 'blog:post_detail' post.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold w-100 me-2">
+                                Đọc tiếp <i class="fa-solid fa-arrow-right-long ms-1"></i>
+                            </a>
+                            
+                            {% if request.user.is_authenticated %}
+                                <div class="dropup" onclick="event.preventDefault();"> <button class="btn btn-outline-primary btn-sm rounded-circle text-muted" type="button" 
+                                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="window" 
+                                            style="width: 32px; height: 32px;">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                    
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2" style="z-index: 9999; min-width: 120px;">
+                                        <li>
+                                            <a class="dropdown-item py-2 fw-medium text-primary" href="{% url 'blog:edit_post' post.id %}">
+                                                <i class="fa-solid fa-pen-to-square me-2"></i>Sửa bài
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider my-1"></li>
+                                        <li>
+                                            <a class="dropdown-item py-2 fw-medium text-danger" href="javascript:void(0);" 
+                                            onclick="confirmDelete('{% url 'blog:delete_post' post.id %}', 'Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                                <i class="fa-solid fa-trash me-2"></i>Xóa bài
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="py-5 bg-white rounded-4 shadow-sm border-dashed border-2 border-secondary">
+                    <i class="fa-solid fa-box-open fa-4x text-muted opacity-50 mb-3"></i>
+                    <h4 class="fw-bold text-dark">Chưa có bài viết nào!</h4>
+                    <p class="text-muted">Góc chia sẻ hiện tại đang trống. Hãy viết bài đầu tiên nhé!</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

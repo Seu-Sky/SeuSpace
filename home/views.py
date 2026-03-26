@@ -76,6 +76,8 @@ def contact(request):
                 return redirect('contact')
 
         elif form_type == 'profile' and request.user.is_authenticated:
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            
             profile_form = UserProfileForm(request.POST, instance=profile)
             if profile_form.is_valid():
                 profile_form.save()

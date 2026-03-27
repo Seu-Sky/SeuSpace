@@ -33,25 +33,23 @@
             style="max-height: 450px; object-fit: contain; background-color: #f8f9fa;" alt="{{ post.title }}">
     </div>
     {% endif %}
-
+    {% if post.audio %}
+        <div class="mb-5 p-4 bg-light rounded-4 border-start border-4 border-success shadow-sm d-flex align-items-center">
+            <div class="d-none d-md-block me-4">
+                <i class="fa-solid fa-music fa-3x text-success opacity-75"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="fw-bold text-dark mb-2">Giai điệu đính kèm</h6>
+                <audio controls class="w-100" style="height: 40px; outline: none;">
+                    <source src="{{ post.audio.url }}" type="audio/mpeg">
+                    Trình duyệt của bạn không hỗ trợ thẻ audio.
+                </audio>
+            </div>
+        </div>
+    {% endif %}
     <div class="post-content text-dark" style="font-size: 17px; line-height: 2; text-align: justify;">
         {{ post.body|linebreaks }}
     </div>
-
-    {% if post.audio %}
-    <div class="mb-5 p-4 bg-light rounded-4 border-start border-4 border-success shadow-sm d-flex align-items-center">
-        <div class="d-none d-md-block me-4">
-            <i class="fa-solid fa-music fa-3x text-success opacity-75"></i>
-        </div>
-        <div class="flex-grow-1">
-            <h6 class="fw-bold text-dark mb-2">Giai điệu đính kèm</h6>
-            <audio controls class="w-100" style="height: 40px; outline: none;">
-                <source src="{{ post.audio.url }}" type="audio/mpeg">
-                Trình duyệt của bạn không hỗ trợ thẻ audio.
-            </audio>
-        </div>
-    </div>
-    {% endif %}
 
     {% if post.video %}
     <div class="mb-5">

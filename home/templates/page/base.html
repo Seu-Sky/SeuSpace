@@ -259,23 +259,26 @@
                 <div class="sidebar-menu shadow-sm">
                     <ul class="nav flex-column">
                         <li class="mb-3">
-                            <div class="px-3 py-2 text-primary fw-bold d-flex align-items-center shadow-sm" style="background-color: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 14px;">
-                                <i class="fa-solid fa-sparkles me-2"></i>
-                                <span>
+                            <div class="greeting-box d-flex align-items-center shadow-sm">
+                                <i class="fa-solid fa-sparkles me-2 icon-main"></i>
+                                <div class="greeting-text">
                                     {% now "H" as hour_str %}
-                                    
                                     {% with hour=hour_str|add:"0" %}
-                                        {% if hour >= 5 and hour < 12 %} 
-                                            <i class="fa-solid fa-sun text-warning me-1"></i> Chào buổi sáng,
-                                        {% elif hour >= 12 and hour < 18 %} 
-                                            <i class="fa-solid fa-cloud-sun text-info me-1"></i> Chào buổi chiều,
-                                        {% else %} 
-                                            <i class="fa-solid fa-moon text-primary me-1"></i> Chào buổi tối,
-                                        {% endif %}
+                                        <span class="d-block small text-muted">
+                                            {% if hour >= 5 and hour < 12 %} 
+                                                <i class="fa-solid fa-sun text-warning me-1"></i> Chào buổi sáng
+                                            {% elif hour >= 12 and hour < 18 %} 
+                                                <i class="fa-solid fa-cloud-sun text-info me-1"></i> Chào buổi chiều
+                                            {% else %} 
+                                                <i class="fa-solid fa-moon text-primary me-1"></i> Chào buổi tối
+                                            {% endif %}
+                                        </span>
                                     {% endwith %}
-                                    
-                                    {{ request.user.username|default:"Bạn" }}
-                                </span>
+
+                                    <span class="fw-bold text-primary">
+                                        {{ request.user.username|default:"Bạn" }}
+                                    </span>
+                                </div>
                             </div>
                         </li>
                         <li><a href="/" class="{% if request.path == '/' %}active{% endif %}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>

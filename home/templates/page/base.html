@@ -21,14 +21,19 @@
             background-color: #f4f7fb; 
             overflow-x: hidden; 
         }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
 
         /* --- 2. Sidebar Menu --- */
         .sidebar-menu {
             background-color: #ffffff;
             border-radius: 12px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            height: calc(100vh - 160px); /* Sidebar cao vừa đủ */
+            height: calc(100dvh - 160px); 
             padding: 10px;
+            max-width: 240px;
         }
 
         .sidebar-menu a {
@@ -61,7 +66,8 @@
         .scrollable-content {
             /* Con số -142px giúp mép dưới khít khịt với Footer */
             height: calc(100dvh - 142px); 
-            overflow-y: auto; 
+            overflow-y: auto;
+            max-width: 100%; 
             padding: 25px;
             scroll-behavior: smooth;
             background-color: #ffffff;
@@ -129,46 +135,79 @@
         .footer-icon { transition: transform 0.2s; opacity: 0.8; }
         .footer-icon:hover { transform: scale(1.2); opacity: 1; }
 
-        /* ===== RESPONSIVE FIX CHO MOBILE ===== */
-        @media (max-width: 768px) {
+       @media (max-width: 768px) {
 
-            /* Cho phép scroll lại */
+            /* Cho phép scroll */
             html, body {
                 overflow-y: auto !important;
                 height: auto !important;
             }
 
-            /* Content không bị lỗi 100vh */
+            /* Layout dọc */
+            .row.g-3 {
+                flex-direction: column;
+            }
+
+            /* Sidebar thành menu ngang */
+            .sidebar-menu {
+                height: auto !important;
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+                padding: 8px;
+                margin-bottom: 10px;
+            }
+
+            .sidebar-menu ul {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                margin: 0;
+                padding: 0;
+            }
+
+            .sidebar-menu li {
+                list-style: none;
+            }
+
+            .sidebar-menu a {
+                font-size: 13px;
+                padding: 8px 12px;
+                display: inline-block;
+            }
+
+            /* Content */
             .scrollable-content {
                 height: auto !important;
                 max-height: none !important;
                 padding: 15px !important;
-                border-radius: 15px !important;
+                border-radius: 12px !important;
             }
 
-            /* Sidebar không bị kéo dài */
-            .sidebar-menu {
-                height: auto !important;
-                margin-bottom: 10px;
+            /* Full width content */
+            .col-md-9,
+            .col-lg-10 {
+                width: 100% !important;
+                padding: 0 !important;
             }
 
-            /* Header gọn lại */
+            /* Header */
             h3 {
-                font-size: 16px !important;
+                font-size: 15px !important;
             }
 
-            /* Avatar nhỏ lại */
+            /* Avatar */
             .avatar-wrapper img {
-                width: 50px !important;
-                height: 50px !important;
+                width: 45px !important;
+                height: 45px !important;
             }
 
-            /* Search box full width */
+            /* Search */
             .search-box-custom {
                 max-width: 100% !important;
             }
 
-            /* Footer không đè nội dung */
+            /* Footer */
             footer {
                 position: relative !important;
             }
@@ -177,7 +216,7 @@
 </head>
 <body>
 
-    <div class="container-fluid px-4 mt-2">  
+    <div class="container mt-2">  
         <div class="row mb-3 border-bottom pb-2 align-items-center">
              <div class="col-md-6 d-flex align-items-center">
                 <div class="d-inline-block avatar-wrapper">
@@ -256,7 +295,7 @@
                 </div>
             </div>
 
-            <div class="col-md-9 col-lg-10 ps-md-2"> <div class="scrollable-content shadow-sm">
+            <div class="col-md-9 col-lg-10 ps-md-3"> <div class="scrollable-content shadow-sm">
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 shadow-sm border-0 d-flex align-items-center" role="alert">
